@@ -1,0 +1,169 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+default_stages: [commit, push]
+default_language_version:
+  # force all unspecified python hooks to run python3
+  python: python3
+minimum_pre_commit_version: "1.20.0"
+
+repos:
+  - repo: meta
+    hooks:
+      - id: identity
+      - id: check-hooks-apply
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.4.0
+    hooks:
+      - id: check-merge-conflict
+      - id: debug-statements
+      - id: check-builtin-literals
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+      - id: check-executables-have-shebangs
+      - id: trailing-whitespace
+      - id: fix-encoding-pragma
+        args:
+          - --remove
+
+  - repo: https://github.com/thlorenz/doctoc.git
+    rev: v2.0.0
+    hooks:
+      - id: doctoc
+        name: Add TOC for md files
+        files: ^README\.md$|^CONTRIBUTING\.md$
+        args:
+          - "--maxlevel"
+          - "2"
+
+  # Licenses
+  - repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.1.9
+    hooks:
+      - id: insert-license
+        name: Add license for all other files
+        exclude: ^\.github/.*$
+        args:
+          - --comment-style
+          - "|#|"
+          - --license-filepath
+          - license-templates/LICENSE.txt
+          - --fuzzy-match-generates-todo
+        files: >
+          \.cfg$|^Dockerfile.*$|\.sh$|\.bash$|\.py$|\.yml$|\.yaml$
+      - id: insert-license
+        name: Add license for all rst files
+        exclude: ^\.github/.*$
+        args:
+          - --comment-style
+          - "||"
+          - --license-filepath
+          - license-templates/LICENSE.rst
+          - --fuzzy-match-generates-todo
+        files: \.rst$
+      - id: insert-license
+        name: Add license for all md and html files
+        files: \.md$|\.html$
+        exclude: ^\.github/.*$
+        args:
+          - --comment-style
+          - "<!--|| -->"
+          - --license-filepath
+          - license-templates/LICENSE.txt
+          - --fuzzy-match-generates-todo
+
+  - repo: https://github.com/psf/black
+    rev: 20.8b1
+    hooks:
+      - id: black
+        args: [--config=./pyproject.toml]
+
+  - repo: https://github.com/timothycrosley/isort
+    rev: 5.6.4
+    hooks:
+      - id: isort
+        name: Run isort to sort imports
+        files: \.py$
+        # To keep consistent with the global isort skip config defined in setup.cfg
+        exclude: ^build/.*$|^.tox/.*$|^venv/.*$
+
+  - repo: https://github.com/pycqa/pydocstyle
+    rev: 5.1.1
+    hooks:
+      - id: pydocstyle
+        name: Run pydocstyle
+        args:
+          - --convention=pep257
+          - --add-ignore=D100,D102,D104,D105,D107,D205,D400,D401
+        exclude: |
+          (?x)
+          ^tests/.*\.py$|
+          ^scripts/.*\.py$
+
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.25.0
+    hooks:
+      - id: yamllint
+        name: Check yaml files with yamllint
+        entry: yamllint -c yamllint-config.yml --strict
+        types: [yaml]
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: "v0.812"
+    hooks:
+      - id: mypy
+
+  - repo: local
+    hooks:
+      - id: pylint
+        name: Pylint on all sources
+        entry: pylint
+        language: system
+        types: [python]
+
+      - id: consistent-pylint
+        language: pygrep
+        name: Check for inconsistent pylint disable/enable without space
+        entry: "pylint:disable|pylint:enable"
+        pass_filenames: true
+        files: \.py$
+
+      - id: update-help-in-readme
+        name: Update help in README.md
+        entry: "./scripts/pre_commit_generate_cli_help.sh"
+        language: system
+        files: \.py$
+
+      - id: markdownlint
+        name: Run markdownlint
+        description: "Checks the style of Markdown files."
+        entry: markdownlint
+        language: node
+        types: [markdown]
+        files: \.(md|mdown|markdown)$
+        additional_dependencies: ['markdownlint-cli']
+
+      - id: flynt
+        name: Convert to f-strings with flynt
+        entry: flynt
+        language: python
+        language_version: python3
+        additional_dependencies: ['flynt']
+        files: \.py$
