@@ -18,7 +18,7 @@ area:docs:
 area:dev:
   - '.github/*'
   - '.pre-commit.config.yaml'
-  - 'asf.yaml'
+  - '.asf.yaml'
   - 'Dockerfile*'
   - 'docker*'
   - 'setup.*'
