@@ -49,8 +49,7 @@ def do_setup() -> None:
     """Perform the Kibble package setup."""
     setup(
         name="apache-kibble",
-        description="Apache Kibble is a tool to collect, aggregate "
-        "and visualize data about any software project.",
+        description="Apache Kibble is a tool to collect, aggregate and visualize data about any software project.",
         long_description=get_long_description(),
         long_description_content_type="text/markdown",
         license="Apache License 2.0",
