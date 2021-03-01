@@ -1,6 +1,6 @@
 ---
 area:api:
-  - 'kibble/api/*'
+  - 'kibble/server/*'
 
 area:cli:
   - 'kibble/cli/*'
