@@ -31,7 +31,7 @@ jobs:
       - uses: actions/setup-python@v2
       - run: pip install '.[devel]'
       - run: pre-commit install
-      - run: pre-commit run --al-files
+      - run: pre-commit run --all-files
   run-tests:
     name: Run Tests
     runs-on: ubuntu-latest
