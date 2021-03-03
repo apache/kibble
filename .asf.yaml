@@ -26,11 +26,14 @@ github:
     - open-source
     - python
     - visualization
+
   features:
     # Enable issues management
     issues: true
     # Enable wiki for documentation
     wiki: false
+    # Enable projects for project management boards
+    projects: true
 
   enabled_merge_buttons:
     squash: true
