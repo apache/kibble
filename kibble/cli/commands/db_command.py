@@ -25,7 +25,7 @@ def db_group():
     """Manage database"""
 
 
-@db_group.command()
+@db_group.command(name="init")
 def db_init():
     """Initialize database"""
     click.echo("To be implemented!")
@@ -36,7 +36,7 @@ def _abort_reset(ctx, _, value):
         ctx.abort()
 
 
-@db_group.command()
+@db_group.command(name="reset")
 @click.option(
     "--yes",
     is_flag=True,
