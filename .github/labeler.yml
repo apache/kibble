@@ -15,6 +15,9 @@ area:docs:
   - 'docs/*'
   - '*.md'
 
+aread:database:
+  - 'kibble/database/*'
+
 area:dev:
   - '.github/*'
   - '.pre-commit.config.yaml'
