@@ -14,10 +14,12 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+from unittest import mock
 
 from click.testing import CliRunner
 
 from kibble.cli.commands.scanners_command import scanners_group
+from kibble.configuration.yaml_config import kconfig
 
 
 class TestScannerCommand:
@@ -28,16 +30,46 @@ class TestScannerCommand:
         assert result.exit_code == 0
         assert result.output.strip() == "To be implemented!"
 
-    def test_list(self):
+    @mock.patch("kibble.cli.commands.scanners_command.get_scanners_classes")
+    def test_list(self, mock_get_scanners_classes):
+        class MockScanner:
+            pass
+
+        mock_get_scanners_classes.return_value = [MockScanner]
         runner = CliRunner()
         result = runner.invoke(scanners_group, ["list"])
 
         assert result.exit_code == 0
-        assert result.output.strip() == "- AbcScanner\n- XyzeScanner"
+        assert result.output.strip() == "MockScanner"
 
-    def test_run(self):
+    @mock.patch.dict(
+        kconfig,
+        {
+            "data_sources": [
+                {
+                    "name": "github",
+                    "organizations": [{"repo_owner": "apache", "repo_name": "kibble"}],
+                    "enabled": ["mock_scanner"],
+                }
+            ]
+        },
+    )
+    @mock.patch("kibble.cli.commands.scanners_command.get_scanner")
+    def test_run(self, mock_get_scanner):
+        class MockScanner:
+            scanner_name = "mock_scanner"
+
+            def __init__(self, **kwargs):
+                pass
+
+            def scan(self):
+                pass
+
+        mock_get_scanner.return_value = MockScanner
+
         runner = CliRunner()
-        result = runner.invoke(scanners_group, ["run", "TestScanner"])
-
+        result = runner.invoke(scanners_group, ["run", "-s", "mock_scanner"])
         assert result.exit_code == 0
-        assert result.output.strip() == "Running TestScanner"
+        assert (
+            result.output.strip() == "Running MockScanner for {'repo_owner': 'apache', 'repo_name': 'kibble'}"
+        )
