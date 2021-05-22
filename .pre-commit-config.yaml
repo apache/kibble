@@ -135,7 +135,6 @@ repos:
       - id: pylint
         name: Pylint on all sources
         entry: pylint
-        rev: 'v2.7.4'
         language: system
         types: [python]
 

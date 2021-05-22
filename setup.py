@@ -26,7 +26,7 @@ BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 DEVEL_REQUIREMENTS = [
     "black==20.8b1",
     "pre-commit==2.7.1",
-    "pylint==2.6.2",
+    "pylint>=2.7.4",
     "pytest==6.1.1",
 ]
 
