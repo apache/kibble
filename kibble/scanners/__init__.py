@@ -14,7 +14,8 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-import os
+
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from kibble.exceptions import KibbleException
@@ -31,11 +32,11 @@ def get_scanners(
     :param data_source: if provided then only scanners for this data source are returned.
     """
     scanner_classes: Dict[str, Any] = {}
-    path = os.path.dirname(os.path.abspath(__file__))
-    for file in sorted(os.listdir(path)):
-        if not file.endswith(".py") or file in ("__init__.py", "base.py"):
+    path = Path(__file__).parent
+    for file in path.iterdir():
+        if file.suffix != ".py" or file.name in ("__init__.py", "base.py"):
             continue
-        py_file = file[:-3]
+        py_file = file.stem
         mod = __import__(".".join([__name__, py_file]), fromlist=[py_file])
         classes = [cls for x in dir(mod) if isinstance(cls := getattr(mod, x), type) and hasattr(cls, "scan")]
         if data_source:

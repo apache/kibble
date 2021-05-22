@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import os
+from pathlib import Path
 from typing import Dict
 
 import yaml
@@ -25,11 +25,13 @@ KIBBLE_YAML = "kibble.yaml"
 
 def parse_kibble_yaml() -> Dict:
     """Reads kibble.yaml config file"""
-    kibble_base_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir)
-    config_path = os.path.join(kibble_base_path, KIBBLE_YAML)
+    config_path = Path(__file__).parent.parent.joinpath(KIBBLE_YAML)
     with open(config_path, "r") as stream:
         config = yaml.safe_load(stream)
     return config
 
 
 kconfig = parse_kibble_yaml()
+
+if __name__ == "__main__":
+    parse_kibble_yaml()
