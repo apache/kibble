@@ -17,7 +17,12 @@
 
 __all__ = ["scanners_group"]
 
+from typing import Optional
+
 import click
+
+from kibble.configuration.yaml_config import kconfig
+from kibble.scanners import get_scanner, get_scanners_classes
 
 
 @click.group(name="scanners")
@@ -32,15 +37,27 @@ def add():
 
 
 @scanners_group.command(name="list")
-def list_scanners():
+@click.option("-ds", "--data-source")
+def list_scanners(data_source: Optional[str] = None):
     """List all available scanners"""
-    scanners_list = ["AbcScanner", "XyzeScanner"]
-    for scanner in scanners_list:
-        click.echo(f"- {scanner}")
+    all_scanners = get_scanners_classes(data_source)
+    for scanner in sorted(all_scanners, key=lambda cls: cls.__name__):
+        click.echo(f"{scanner.__name__}")
 
 
 @scanners_group.command()
-@click.argument("scanner_name")
+@click.option("-s", "--scanner-name", required=True)
 def run(scanner_name: str):
     """Trigger a scanning process for given scanner"""
-    click.echo(f"Running {scanner_name}")
+    for data_source in kconfig.get("data_sources", []):
+        if scanner_name not in data_source["enabled"]:
+            continue
+        organizations = data_source.get("organizations", [])
+        if not organizations:
+            click.echo(f"No organizations to scan in {data_source} data source.")
+            continue
+
+        scanner = get_scanner(scanner_name=scanner_name)
+        for org in organizations:
+            click.echo(f"Running {scanner.__name__} for {org}")
+            scanner(**org).scan()

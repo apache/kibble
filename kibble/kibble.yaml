@@ -1,0 +1,8 @@
+---
+data_sources:
+  - name: github
+    organizations:
+      - repo_owner: apache
+        repo_name: kibble
+    enabled:
+      - github_issues
