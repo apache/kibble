@@ -15,50 +15,20 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Any, Dict, List, Optional, Union
-from urllib.parse import urlencode, urljoin
+from typing import Any, Dict, List, Tuple
 
-import requests
+from kibble.data_sources.github.data_types.base import GithubBaseDataType
 
-from kibble.scanners.base import BaseScanner
-from kibble.secrets.env_variable import get_secret_from_env
-
-
-class GithubBaseScanner(BaseScanner):
-    """Github base scanner class"""
-
-    # pylint: disable=too-few-public-methods
-    data_source = "github"
-
-    def __init__(self, *, repo_owner: str, repo_name: str, api_key: Optional[str] = None, **kwargs):
-        super().__init__(**kwargs)
-        self.repo_owner = repo_owner
-        self.repo_name = repo_name
-        self.api_key = api_key or get_secret_from_env("GH_API_KEY")
-        self.repo_full_name = f"{self.repo_owner}/{self.repo_name}"
-
-        self.base_url = "https://api.github.com"
-        self.headers = {"Accept": "application/vnd.github.v3+json"}
-        if api_key:
-            self.headers["Authorization"] = f"token {api_key}"
-
-    def _send_request(self, endpoint: str, query: Optional[Dict] = None) -> Union[List, Dict]:
-        url = urljoin(self.base_url, endpoint)
-        url = f"{url}?{urlencode(query)}" if query else url
-        response = requests.get(url, headers=self.headers)
-        response.raise_for_status()
-        return response.json()
-
-    def _persist(self, payload: Any):
-        pass
+Issue = Dict[str, Any]
+PR = Dict[str, Any]
 
 
-class GithubIssuesScanner(GithubBaseScanner):
-    """Github issues and pull requests scanner"""
+class GithubPrAndIssuesDataType(GithubBaseDataType):
+    """Github issues and pull requests"""
 
-    scanner_name = "github_issues"
+    name = "pr_and_issues"
 
-    def scan(self):
+    def fetch_data(self):
         endpoint = f"/repos/{self.repo_owner}/{self.repo_name}/issues"
         query = {"per_page": 100, "page": 1}
 
@@ -75,3 +45,8 @@ class GithubIssuesScanner(GithubBaseScanner):
 
         self.log.info("Collected %d issues and %d PRs from %s", len(issues), len(prs), self.repo_full_name)
         return issues, prs
+
+    def persist(self, payload: Tuple[List[Issue], List[PR]]):
+        issues, prs = payload
+        self._persist(issues)
+        self._persist(prs)

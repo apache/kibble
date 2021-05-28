@@ -14,18 +14,3 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-
-import logging
-from typing import Any
-
-
-class BaseScanner:
-    """Abstract, base class for all scanners"""
-
-    # pylint: disable=too-few-public-methods
-    def __init__(self, **kwargs):
-        self.log = logging.getLogger(__name__)
-
-    def _persist(self, payload: Any):  # pylint: disable=no-self-use
-        """Persists data to database. Should be implemented per scanner."""
-        raise NotImplementedError()

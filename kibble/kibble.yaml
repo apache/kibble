@@ -1,8 +1,9 @@
 ---
 data_sources:
-  - name: github
-    organizations:
-      - repo_owner: apache
-        repo_name: kibble
-    enabled:
-      - github_issues
+  - name: github_kibble
+    class: kibble.data_sources.github.GithubDataSource
+    config:
+      repo_owner: apache
+      repo_name: kibble
+      enabled_data_types:
+        - pr_issues

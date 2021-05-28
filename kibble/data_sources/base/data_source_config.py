@@ -15,15 +15,29 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import os
+from typing import Any, Dict, NamedTuple
 
-from kibble.exceptions import SecretNotFound
+from kibble.data_sources.base.base_data_source import BaseDataSource
+from kibble.data_sources.base.module_loading import import_string
 
 
-def get_secret_from_env(key: str):
-    """Retrieves value from KIBBLE_SECRET_{key}"""
-    env_key = f"KIBBLE_SECRET_{key.upper()}"
-    secret = os.environ.get(env_key)
-    if not secret:
-        raise SecretNotFound(secret=env_key, secret_type="environment variables")
-    return secret
+class DataSourceConfig(NamedTuple):
+    """Data source configuration"""
+
+    name: str
+    klass: str
+    config: Dict[str, Any]
+
+    @classmethod
+    def from_dict(cls, dictionary: Dict):
+        """Make DataSourceConfig from a dictionary"""
+        return cls(
+            name=dictionary["name"],
+            klass=dictionary["class"],
+            config=dictionary["config"],
+        )
+
+    def get_object(self) -> BaseDataSource:
+        """Return data source object defined by this config"""
+        ds_class = import_string(self.klass)
+        return ds_class(**self.config)

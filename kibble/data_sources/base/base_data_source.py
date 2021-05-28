@@ -15,15 +15,24 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import os
+from typing import Dict, List, Optional
 
-from kibble.exceptions import SecretNotFound
+from kibble.data_sources.base.module_loading import import_string
 
 
-def get_secret_from_env(key: str):
-    """Retrieves value from KIBBLE_SECRET_{key}"""
-    env_key = f"KIBBLE_SECRET_{key.upper()}"
-    secret = os.environ.get(env_key)
-    if not secret:
-        raise SecretNotFound(secret=env_key, secret_type="environment variables")
-    return secret
+class BaseDataSource:
+    """Base class for all data sources"""
+
+    data_types_classes: Dict[str, str] = {}
+
+    def __init__(self, *, enabled_data_types: Optional[List[str]] = None):
+        self.enabled_data_types = enabled_data_types
+
+    def scan(self):
+        """Collect data for configured data types"""
+        for data_type_name, klass in self.data_types_classes.items():
+            if self.enabled_data_types and data_type_name not in self.enabled_data_types:
+                continue
+            data_type_class = import_string(klass)
+            data_type = data_type_class(data_source=self)
+            data_type.scan()

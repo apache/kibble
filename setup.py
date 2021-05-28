@@ -30,7 +30,7 @@ DEVEL_REQUIREMENTS = [
     "pytest==6.1.1",
 ]
 
-INSTALL_REQUIREMENTS = ["requests>=2.25.1"]
+INSTALL_REQUIREMENTS = ["requests>=2.25.1", "click>=8.0.1", "PyYAML>=5.4.1"]
 
 EXTRAS_REQUIREMENTS = {"devel": DEVEL_REQUIREMENTS}
 

@@ -15,15 +15,28 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import os
+import logging
+from typing import Any
 
-from kibble.exceptions import SecretNotFound
 
+class BaseDataType:
+    """Abstract, base class for all data types"""
 
-def get_secret_from_env(key: str):
-    """Retrieves value from KIBBLE_SECRET_{key}"""
-    env_key = f"KIBBLE_SECRET_{key.upper()}"
-    secret = os.environ.get(env_key)
-    if not secret:
-        raise SecretNotFound(secret=env_key, secret_type="environment variables")
-    return secret
+    name: str
+
+    # pylint: disable=too-few-public-methods
+    def __init__(self, **kwargs):
+        self.log = logging.getLogger(__name__)
+
+    def fetch_data(self):  # pylint: disable=no-self-use
+        """Fetch data from data source"""
+        raise NotImplementedError()
+
+    def persist(self, payload: Any):  # pylint: disable=no-self-use
+        """Persist collected data"""
+        raise NotImplementedError()
+
+    def scan(self):
+        """Persists data to database"""
+        payload = self.fetch_data()
+        self.persist(payload)
