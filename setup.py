@@ -16,12 +16,13 @@
 # under the License.
 
 import os
+from pathlib import Path
 
 from setuptools import find_packages, setup
 
 VERSION = "2.0.0dev"
 
-BASE_PATH = os.path.dirname(os.path.realpath(__file__))
+BASE_PATH = Path(__file__).parent
 
 DEVEL_REQUIREMENTS = [
     "black==20.8b1",
@@ -30,7 +31,7 @@ DEVEL_REQUIREMENTS = [
     "pytest==6.1.1",
 ]
 
-INSTALL_REQUIREMENTS = ["requests>=2.25.1", "click>=8.0.1", "PyYAML>=5.4.1"]
+INSTALL_REQUIREMENTS = ["elasticsearch==7.13.1", "requests>=2.25.1", "click>=8.0.1", "PyYAML>=5.4.1"]
 
 EXTRAS_REQUIREMENTS = {"devel": DEVEL_REQUIREMENTS}
 

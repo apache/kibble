@@ -15,38 +15,25 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Any, Dict, List, Tuple
+from typing import Dict, List
 
 from kibble.data_sources.github.data_types.base import GithubBaseDataType
 
-Issue = Dict[str, Any]
-PR = Dict[str, Any]
 
-
-class GithubPrAndIssuesDataType(GithubBaseDataType):
+class DataType(GithubBaseDataType):
     """Github issues and pull requests"""
 
-    name = "pr_and_issues"
+    _doc_type = "issue"
 
     def fetch_data(self):
         endpoint = f"/repos/{self.repo_owner}/{self.repo_name}/issues"
         query = {"per_page": 100, "page": 1}
 
         issues: List[Dict] = []
-        prs: List[Dict] = []
         self.log.info("Collecting Github issues and PRs from %s", self.repo_full_name)
         while new_issues := self._send_request(endpoint, query):
             for issue_pr in new_issues:
-                if "pull_request" in issue_pr:
-                    prs.append(issue_pr)
-                else:
-                    issues.append(issue_pr)
+                issues.append(issue_pr)
             query["page"] += 1
 
-        self.log.info("Collected %d issues and %d PRs from %s", len(issues), len(prs), self.repo_full_name)
-        return issues, prs
-
-    def persist(self, payload: Tuple[List[Issue], List[PR]]):
-        issues, prs = payload
-        self._persist(issues)
-        self._persist(prs)
+        self.persist(issues, doc_type=self._doc_type, id_mapper=lambda r: r["id"])

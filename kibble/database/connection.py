@@ -15,29 +15,15 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Any, Dict, NamedTuple
+from elasticsearch import Elasticsearch
 
-from kibble.data_sources.base.base_data_source import BaseDataSource
-from kibble.data_sources.base.module_loading import import_string
+from kibble.configuration.yaml_config import kconfig
 
 
-class DataSourceConfig(NamedTuple):
-    """Data source configuration"""
+def create_es() -> Elasticsearch:
+    """Creates ES instance connected to Kibble database"""
+    es_hosts = kconfig["elasticsearch"]["hosts"]
+    return Elasticsearch(es_hosts)
 
-    name: str
-    klass: str
-    config: Dict[str, Any]
 
-    @classmethod
-    def from_dict(cls, dictionary: Dict):
-        """Make DataSourceConfig from a dictionary"""
-        return cls(
-            name=dictionary["name"],
-            klass=dictionary["class"],
-            config=dictionary["config"],
-        )
-
-    def get_object(self) -> BaseDataSource:
-        """Return data source object defined by this config"""
-        ds_class = import_string(self.klass)
-        return ds_class(**self.config)
+es = create_es()

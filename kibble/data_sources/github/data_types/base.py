@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Any, Dict, List, Optional, Union
+from typing import Dict, List, Optional, Union
 from urllib.parse import urlencode, urljoin
 
 import requests
@@ -24,8 +24,11 @@ from kibble.data_sources.base.base_data_type import BaseDataType
 from kibble.data_sources.github import GithubDataSource
 
 
+# pylint: disable=abstract-method
 class GithubBaseDataType(BaseDataType):
     """Base data type class for Github"""
+
+    _index = "github"
 
     def __init__(self, *, data_source: GithubDataSource, **kwargs):
         super().__init__(**kwargs)
@@ -46,14 +49,3 @@ class GithubBaseDataType(BaseDataType):
         response = requests.get(url, headers=self.headers)
         response.raise_for_status()
         return response.json()
-
-    def _persist(self, payload: Any):
-        print(f"Collected {len(payload)} from {self.repo_full_name}")
-
-    def fetch_data(self):  # pylint: disable=no-self-use
-        """Fetch data from data source"""
-        raise NotImplementedError()
-
-    def persist(self, payload: Any):  # pylint: disable=no-self-use
-        """Persist collected data"""
-        raise NotImplementedError()

@@ -1,4 +1,7 @@
 ---
+elasticsearch:
+  hosts:
+    - http://localhost:9200
 data_sources:
   - name: github_kibble
     class: kibble.data_sources.github.GithubDataSource
@@ -6,4 +9,4 @@ data_sources:
       repo_owner: apache
       repo_name: kibble
       enabled_data_types:
-        - pr_issues
+        - issues

@@ -20,7 +20,7 @@ __all__ = ["scanners_group"]
 import click
 
 from kibble.configuration.yaml_config import kconfig
-from kibble.data_sources.base.data_source_config import DataSourceConfig
+from kibble.data_sources.base.base_data_source import DataSourceConfig
 
 
 @click.group(name="scanners")

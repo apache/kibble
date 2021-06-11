@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Any, Dict, List, Optional, Union
+from typing import Optional
 
 from kibble.data_sources.base.base_data_source import BaseDataSource
 from kibble.exceptions import KibbleException
@@ -26,9 +26,6 @@ class GithubDataSource(BaseDataSource):
     """Github datasource class"""
 
     name = "github"
-    data_types_classes = {
-        "pr_issues": "kibble.data_sources.github.data_types.pr_issues.GithubPrAndIssuesDataType"
-    }
 
     def __init__(self, *, repo_owner: str, repo_name: str, api_key: Optional[str] = None, **kwargs):
         super().__init__(**kwargs)
