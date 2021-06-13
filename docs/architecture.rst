@@ -49,7 +49,7 @@ have to pass ``name`` and ``config`` which is a configuration specific for a giv
 Data source
 -----------
 
-Data source represents external source of information (for example Github, JIRA, mailing list etc). Each data source
+Data source represents an external source of information (for example Github, JIRA, mailing list etc). Each data source
 is a python package. In this way users can easily build their own data sources and use them with Kibble.
 
 Data source package has to have the following structure:
@@ -65,13 +65,13 @@ Data source package has to have the following structure:
     | | type2.py
     | | ...
 
-The ``data_source_name.__init__`` should include the class defining the data source but the class can be place in other
+The ``data_source_name.__init__`` should include the class defining the data source but the class can be placed in another
 file in top leve directory of the package.
 
 Data types
 ..........
 
-Data type represent single type of data within a data source. For example if Github is a data source then issues and
+Data type represents a single type of data within a data source. For example if Github is a data source then issues and
 comments will be two different data types. A data type is a class that has to implement ``fetch_data`` method that is
 used to fetch and persist data.
 
@@ -85,7 +85,7 @@ Next to persisting data, a data type should also define metrics that can be calc
 Configuring a data source
 .........................
 
-As described previous a data sources can be configured in ``kibble.yaml`` config file. For example:
+As described previously data sources can be configured in ``kibble.yaml`` config file. For example:
 
 .. code-block::
 
@@ -122,5 +122,5 @@ In the above example we can see that:
   Pulsar we fetch issues and comments data.
 * There's also a third data source using ``PonyDataSource`` configured for Apache Pulsar dev list.
 
-Thanks to this design users gain a big granularity on configuring the data they want to fetch. This also creates a big
-chance for configuring different authorization option for each data source in future.
+Thanks to this design users will gain more granularity to configure the data they want to fetch. This also creates a big
+opportunity for configuring different authorization options for each data source in future.
