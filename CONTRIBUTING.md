@@ -34,9 +34,9 @@
 ## Community
 
 The main development and design discussion happens on our mailing lists.
-We have a list specifically for development, and one for future user questions and feedback.
+We have a list specifically for development and one for future user questions and feedback.
 
-To join in the discussion on the design and roadmap, you can send email to [dev@kibble.apache.org](mailto:dev@kibble.apache.org).<br/>
+To join in the discussion on the design and roadmap, you can send an email to [dev@kibble.apache.org](mailto:dev@kibble.apache.org).<br/>
 You can subscribe to the list by sending an email to [dev-subscribe@kibble.apache.org](mailto:dev-subscribe@kibble.apache.org).<br/>
 You can also browse the archives online at [lists.apache.org](https://lists.apache.org/list.html?dev@kibble.apache.org).
 
@@ -67,9 +67,9 @@ docker run apache/kibble-dev pytest
 ## Testing
 
 Apache Kibble project uses [pytest](https://docs.pytest.org/en/stable/) for running testing. Writing
-good test helps us avoid regression and unexpected issues.
+good tests help us avoid regression and unexpected issues.
 
-In order to run tests you all you need to do is to call pytest:
+In order to run tests all you need to do is call pytest:
 
 ```
 # Run all tests
@@ -104,8 +104,8 @@ Apache Kibble project is using different tools to ensure the quality of the code
 - [mypy](https://github.com/python/mypy)
 - [pydocstyle](https://github.com/PyCQA/pydocstyle)
 
-All those tool can be automatically run using [pre-commits](https://pre-commit.com). We encourage you to
-use pre-commits, but it's not required in order to contribute. Every change is checked
+All those tools can be automatically run using [pre-commits](https://pre-commit.com). We encourage you to
+use pre-commits, but it's not required to contribute. Every change is checked
 on CI and if it does not pass the tests it cannot be accepted. If you want to check locally then
 you should install Python3.6 or newer together and run:
 
