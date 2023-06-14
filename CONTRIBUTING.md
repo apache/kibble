@@ -67,7 +67,7 @@ docker run apache/kibble-dev pytest
 ## Testing
 
 Apache Kibble project uses [pytest](https://docs.pytest.org/en/stable/) for running testing. Writing
-a good test helps us avoid regression and unexpected issues.
+good tests help us avoid regression and unexpected issues.
 
 In order to run tests all you need to do is call pytest:
 
