@@ -5,7 +5,7 @@
 # run arbitrary code.
 extension-pkg-whitelist=
 
-# Specify a score threshold to be exceeded before program exits with error.
+# Specify a score threshold to be exceeded before program terminates with an error.
 fail-under=10.0
 
 # Add files or directories to the blacklist. They should be base names, not
@@ -29,7 +29,7 @@ jobs=1
 # complex, nested conditions.
 limit-inference-results=100
 
-# List of plugins (as comma separated values of python module names) to load,
+# List of plugins (as comma-separated values of Python module names) to load,
 # usually to register additional checkers.
 load-plugins=
 
@@ -57,8 +57,8 @@ confidence=
 # file where it should appear only once). You can also use "--disable=all" to
 # disable everything first and then reenable specific checks. For example, if
 # you want to run only the similarities checker, you can use "--disable=all
-# --enable=similarities". If you want to run only the classes checker, but have
-# no Warning level messages displayed, use "--disable=all --enable=classes
+# --enable=similarities". If you only want to run the class checker, but
+# do not want to see warning level messages, use "--disable=all --enable=classes
 # --disable=W".
 disable=print-statement,
         parameter-unpacking,
@@ -142,9 +142,9 @@ disable=print-statement,
         missing-module-docstring
 
 # Enable the message, report, category or checker with the given id(s). You can
-# either give multiple identifier separated by comma (,) or put this option
-# multiple time (only on the command line, not in the configuration file where
-# it should appear only once). See also the "--disable" option for examples.
+# either give multiple identifiers separated by comma (,) or put this option
+# multiple times (only on the command line, not in the configuration file where
+# it should only appear once). See also the "--disable" option for examples.
 enable=c-extension-no-member
 
 
@@ -152,12 +152,12 @@ enable=c-extension-no-member
 
 # Python expression which should return a score less than or equal to 10. You
 # have access to the variables 'error', 'warning', 'refactor', and 'convention'
-# which contain the number of messages in each category, as well as 'statement'
+# which contains the number of messages in each category, as well as 'statement'
 # which is the total number of statements analyzed. This score is used by the
 # global evaluation report (RP0004).
 evaluation=10.0 - ((float(5 * error + warning + refactor + convention) / statement) * 10)
 
-# Template used to display messages. This is a python new-style format string
+# Template used to display messages. This is a Python new-style format string
 # used to format the message information. See doc for all details.
 #msg-template=
 
@@ -178,9 +178,9 @@ score=yes
 # Maximum number of nested blocks for function / method body
 max-nested-blocks=5
 
-# Complete name of functions that never returns. When checking for
+# Complete name of functions that never return. When checking for
 # inconsistent-return-statements if a never returning function is called then
-# it will be considered as an explicit return statement and no message will be
+# it will be considered an explicit return statement and no message will be
 # printed.
 never-returning-functions=sys.exit
 
@@ -205,25 +205,25 @@ max-spelling-suggestions=4
 # install the python-enchant package.
 spelling-dict=
 
-# List of comma separated words that should not be checked.
+# List of comma-separated words that should not be checked.
 spelling-ignore-words=
 
 # A path to a file that contains the private dictionary; one word per line.
 spelling-private-dict-file=
 
-# Tells whether to store unknown words to the private dictionary (see the
+# Tells whether to store unknown words in the private dictionary (see the
 # --spelling-private-dict-file option) instead of raising a message.
 spelling-store-unknown-words=no
 
 
 [MISCELLANEOUS]
 
-# List of note tags to take in consideration, separated by a comma.
+# List of note tags to take into consideration, separated by a comma.
 notes=FIXME,
       XXX,
       TODO
 
-# Regular expression of note tags to take in consideration.
+# Regular expression of note tags to take into consideration.
 #notes-rgx=
 
 
@@ -274,7 +274,7 @@ missing-member-hint=yes
 # similar match for a missing member name.
 missing-member-hint-distance=1
 
-# The total number of similar names that should be taken in consideration when
+# The total number of similar names that should be taken into consideration when
 # showing a hint for a missing member.
 missing-member-max-choices=1
 
@@ -291,7 +291,7 @@ additional-builtins=
 # Tells whether unused global variables should be treated as a violation.
 allow-global-unused-variables=yes
 
-# List of strings which can identify a callback function by name. A callback
+# List of strings that can identify a callback function by name. A callback
 # name must start or end with one of those strings.
 callbacks=cb_,
           _cb
@@ -334,7 +334,7 @@ max-line-length=110
 max-module-lines=1000
 
 # Allow the body of a class to be on the same line as the declaration if body
-# contains single statement.
+# contains a single statement.
 single-line-class-stmt=no
 
 # Allow the body of an if to be on the same line as the test if there is no
@@ -353,7 +353,7 @@ ignore-docstrings=yes
 # Ignore imports when computing similarities.
 ignore-imports=no
 
-# Minimum lines number of a similarity.
+# Minimum lines number of similarity.
 min-similarity-lines=4
 
 
@@ -463,7 +463,7 @@ no-docstring-rgx=^_
 
 # List of decorators that produce properties, such as abc.abstractproperty. Add
 # to this list to register other decorators that produce valid properties.
-# These decorators are taken in consideration only for invalid-name.
+# These decorators are taken into consideration only for invalid-name.
 property-classes=abc.abstractproperty
 
 # Naming style matching correct variable names.
@@ -476,7 +476,7 @@ variable-naming-style=snake_case
 
 [STRING]
 
-# This flag controls whether inconsistent-quotes generates a warning when the
+# This flag controls whether inconsistent-quotes generate a warning when the
 # character used as a quote delimiter is used inconsistently within a module.
 check-quote-consistency=no
 
@@ -559,7 +559,7 @@ max-attributes=7
 # Maximum number of boolean expressions in an if statement (see R0916).
 max-bool-expr=5
 
-# Maximum number of branch for function / method body.
+# Maximum number of branches for function / method body.
 max-branches=12
 
 # Maximum number of locals for function / method body.
