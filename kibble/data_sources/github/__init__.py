@@ -14,33 +14,23 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
----
-name: CI
-on:  # yamllint disable-line rule:truthy
-  push:
-    branches: ['main']
-  pull_request:
-    branches: ['main']
 
-jobs:
-  statics:
-    name: Static checks
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: '3.9.4'
-      - run: pip install -e '.[devel]'
-      - run: pre-commit install
-      - run: pre-commit run --all-files
-  run-tests:
-    name: Run Tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: '3.9.4'
-      - run: pip install '.[devel]'
-      - run: pytest tests
+from typing import Optional
+
+from kibble.data_sources.base.base_data_source import BaseDataSource
+from kibble.exceptions import KibbleException
+from kibble.secrets.env_variable import get_secret_from_env
+
+
+class GithubDataSource(BaseDataSource):
+    """Github datasource class"""
+
+    name = "github"
+
+    def __init__(self, *, repo_owner: str, repo_name: str, api_key: Optional[str] = None, **kwargs):
+        super().__init__(**kwargs)
+        self.repo_owner = repo_owner
+        self.repo_name = repo_name
+        self.api_key = api_key or get_secret_from_env("GH_API_KEY")
+        if not self.api_key:
+            raise KibbleException("No Github API_KEY")

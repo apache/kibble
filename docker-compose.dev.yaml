@@ -1,0 +1,37 @@
+---
+version: '3'
+
+services:
+  # Elasticsearch node required as a database for Apache Kibble
+  elasticsearch:
+    image: elasticsearch:7.13.1
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      node.name: es01
+      discovery.seed_hosts: es02
+      cluster.initial_master_nodes: es01
+      cluster.name: kibble
+      ES_JAVA_OPTS: -Xms256m -Xmx256m
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - "kibble-es-data:/usr/share/elasticsearch/data"
+
+  # Kibana to view and manage Elasticsearch
+  kibana:
+    image: kibana:7.13.1
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+
+volumes:
+  # named volumes can be managed easier using docker-compose
+  kibble-es-data:

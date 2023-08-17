@@ -14,33 +14,16 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
----
-name: CI
-on:  # yamllint disable-line rule:truthy
-  push:
-    branches: ['main']
-  pull_request:
-    branches: ['main']
 
-jobs:
-  statics:
-    name: Static checks
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: '3.9.4'
-      - run: pip install -e '.[devel]'
-      - run: pre-commit install
-      - run: pre-commit run --all-files
-  run-tests:
-    name: Run Tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: '3.9.4'
-      - run: pip install '.[devel]'
-      - run: pytest tests
+import os
+
+from kibble.exceptions import SecretNotFound
+
+
+def get_secret_from_env(key: str):
+    """Retrieves value from KIBBLE_SECRET_{key}"""
+    env_key = f"KIBBLE_SECRET_{key.upper()}"
+    secret = os.environ.get(env_key)
+    if not secret:
+        raise SecretNotFound(secret=env_key, secret_type="environment variables")
+    return secret

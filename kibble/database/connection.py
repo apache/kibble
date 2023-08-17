@@ -14,33 +14,16 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
----
-name: CI
-on:  # yamllint disable-line rule:truthy
-  push:
-    branches: ['main']
-  pull_request:
-    branches: ['main']
 
-jobs:
-  statics:
-    name: Static checks
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: '3.9.4'
-      - run: pip install -e '.[devel]'
-      - run: pre-commit install
-      - run: pre-commit run --all-files
-  run-tests:
-    name: Run Tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: '3.9.4'
-      - run: pip install '.[devel]'
-      - run: pytest tests
+from elasticsearch import Elasticsearch
+
+from kibble.configuration.yaml_config import kconfig
+
+
+def create_es() -> Elasticsearch:
+    """Creates ES instance connected to Kibble database"""
+    es_hosts = kconfig["elasticsearch"]["hosts"]
+    return Elasticsearch(es_hosts)
+
+
+es = create_es()
